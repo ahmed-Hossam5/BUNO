@@ -1,0 +1,13 @@
+name: buno_shared
+description: API contract shared by the Buno app and server (paths, DTOs).
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ^3.13.4
+
+resolution: workspace
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.26.0

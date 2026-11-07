@@ -1,0 +1,12 @@
+# Buno monorepo: one Dart pub workspace. `flutter pub get` here resolves
+# every member with a single pubspec.lock.
+name: buno_workspace
+publish_to: none
+
+environment:
+  sdk: ^3.13.4
+
+workspace:
+  - apps/mobile
+  - apps/server
+  - packages/buno_shared

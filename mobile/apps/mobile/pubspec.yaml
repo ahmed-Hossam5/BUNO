@@ -1,0 +1,77 @@
+name: buno
+description: "Buno — one-screen visual implementation test (Home)."
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.13.4
+
+resolution: workspace
+
+dependencies:
+  battery_plus: ^7.1.2
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_map: ^8.3.2
+  flutter_svg: ^2.3.0
+  geolocator: ^14.1.2
+  google_maps_flutter: ^2.19.0
+  image_picker: ^1.2.4
+  latlong2: ^0.10.1
+  lottie: ^3.6.1
+  mobile_scanner: ^7.4.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  uses-material-design: false
+
+  assets:
+    - assets/logo/
+    - assets/icons/
+    - assets/brand/
+    - assets/lottie/
+
+  fonts:
+    - family: Sora
+      fonts:
+        - asset: assets/fonts/Sora-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Sora-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Sora-Bold.ttf
+          weight: 700
+    - family: ReadexPro
+      fonts:
+        - asset: assets/fonts/ReadexPro-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/ReadexPro-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/ReadexPro-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/ReadexPro-Bold.ttf
+          weight: 700
+
+# App icon — generated from the supplied buno-design-system/app-icon files.
+# Regenerate with: dart run flutter_launcher_icons
+flutter_launcher_icons:
+  # iOS wants a full-bleed square without transparency (iOS rounds it):
+  # the supplied 1024 icon flattened onto its own #0A0A0B background.
+  ios: true
+  image_path_ios: "assets/app_icon/buno-app-icon-1024-square.png"
+  remove_alpha_ios: true
+  # Android: adaptive icon from the supplied foreground + brand background,
+  # and the supplied rounded icon for legacy launchers.
+  android: true
+  image_path_android: "assets/app_icon/buno-app-icon-1024.png"
+  adaptive_icon_background: "#0A0A0B"
+  adaptive_icon_foreground: "assets/app_icon/buno-adaptive-foreground-1080.png"
+  # The supplied foreground is already drawn inside the 66dp safe zone.
+  adaptive_icon_foreground_inset: 0
+  min_sdk_android: 21

@@ -1,0 +1,19 @@
+name: buno_server
+description: Buno backend, a modular monolith (one deployable, one module per domain).
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ^3.13.4
+
+resolution: workspace
+
+dependencies:
+  buno_shared:
+    path: ../../packages/buno_shared
+  shelf: ^1.4.2
+  shelf_router: ^1.1.4
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.26.0
