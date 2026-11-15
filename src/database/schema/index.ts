@@ -7,3 +7,6 @@ export * from './rentals.schema.js';
 export * from './telemetry.schema.js';
 export * from './notifications.schema.js';
 export * from './audit-logs.schema.js';
+export * from './transfer-missions.schema.js';
+export * from './transfer-mission-items.schema.js';
+export * from './power-bank-movements.schema.js';

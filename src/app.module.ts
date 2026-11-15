@@ -19,7 +19,7 @@ import { MaintenanceModule } from './modules/maintenance/maintenance.module.js';
 import { NotificationsModule } from './modules/notifications/notifications.module.js';
 import { SupportModule } from './modules/support/support.module.js';
 import { AuditLogsModule } from './modules/audit-logs/audit-logs.module.js';
-
+import { PortsModule } from './modules/ports/ports.module.js';
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
 @Module({
@@ -48,6 +48,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     NotificationsModule,
     SupportModule,
     AuditLogsModule,
+    PortsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

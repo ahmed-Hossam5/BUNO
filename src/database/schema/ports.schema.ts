@@ -1,3 +1,4 @@
+
 import {
   pgEnum,
   pgTable,
@@ -23,9 +24,7 @@ export const ports = pgTable(
 
     stationId: uuid('station_id')
       .notNull()
-      .references(() => stations.id, {
-        
-      }),
+      .references(() => stations.id),
 
     portNumber: integer('port_number').notNull(),
 
@@ -42,9 +41,16 @@ export const ports = pgTable(
     }).defaultNow().notNull(),
   },
   (table) => [
+    // منع تكرار رقم المنفذ داخل نفس المحطة
     unique('station_port_number_unique').on(
       table.stationId,
       table.portNumber,
+    ),
+
+    // السماح بإنشاء Composite Foreign Keys
+    unique('ports_station_id_id_unique').on(
+      table.stationId,
+      table.id,
     ),
   ],
 );

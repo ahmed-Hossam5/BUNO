@@ -10,6 +10,7 @@ import { ports } from './ports.schema.js';
 
 export const powerBankStatusEnum = pgEnum('power_bank_status', [
   'AVAILABLE',
+  'RESERVED',
   'RENTED',
   'MAINTENANCE',
   'LOST',

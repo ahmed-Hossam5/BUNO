@@ -64,6 +64,20 @@
       "when": 1793845499889,
       "tag": "0008_wide_spot",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1794708294019,
+      "tag": "0009_icy_wolf_cub",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1794709404060,
+      "tag": "0010_nappy_molecule_man",
+      "breakpoints": true
     }
   ]
 }

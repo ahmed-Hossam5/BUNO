@@ -1,3 +1,4 @@
+
 import {
   pgEnum,
   pgTable,
@@ -5,6 +6,7 @@ import {
   jsonb,
   timestamp,
   index,
+  foreignKey,
 } from 'drizzle-orm/pg-core';
 
 import { stations } from './stations.schema.js';
@@ -32,8 +34,7 @@ export const telemetry = pgTable(
       .notNull()
       .references(() => stations.id),
 
-    portId: uuid('port_id')
-      .references(() => ports.id),
+    portId: uuid('port_id'),
 
     powerBankId: uuid('power_bank_id')
       .references(() => powerBanks.id),
@@ -52,10 +53,26 @@ export const telemetry = pgTable(
     }).defaultNow().notNull(),
   },
   (table) => [
-    index('telemetry_station_id_idx').on(table.stationId),
+    // Ensure port belongs to the reported station
+    foreignKey({
+      name: 'telemetry_port_station_fk',
+      columns: [
+        table.stationId,
+        table.portId,
+      ],
+      foreignColumns: [
+        ports.stationId,
+        ports.id,
+      ],
+    }),
 
-    index('telemetry_power_bank_id_idx').on(table.powerBankId),
+    index('telemetry_station_id_idx')
+      .on(table.stationId),
 
-    index('telemetry_recorded_at_idx').on(table.recordedAt),
+    index('telemetry_power_bank_id_idx')
+      .on(table.powerBankId),
+
+    index('telemetry_recorded_at_idx')
+      .on(table.recordedAt),
   ],
 );

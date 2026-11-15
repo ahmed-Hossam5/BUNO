@@ -1,16 +1,21 @@
+
 import {
   pgEnum,
   pgTable,
   uuid,
   timestamp,
   uniqueIndex,
+  foreignKey,
+  check,
 } from 'drizzle-orm/pg-core';
+
+import { sql } from 'drizzle-orm';
 
 import { users } from './users.schema.js';
 import { powerBanks } from './power-banks.schema.js';
 import { stations } from './stations.schema.js';
 import { ports } from './ports.schema.js';
-import { sql } from 'drizzle-orm';
+
 export const rentalStatusEnum = pgEnum('rental_status', [
   'PENDING',
   'ACTIVE',
@@ -36,14 +41,12 @@ export const rentals = pgTable(
       .references(() => stations.id),
 
     pickupPortId: uuid('pickup_port_id')
-      .notNull()
-      .references(() => ports.id),
+      .notNull(),
 
     returnStationId: uuid('return_station_id')
       .references(() => stations.id),
 
-    returnPortId: uuid('return_port_id')
-      .references(() => ports.id),
+    returnPortId: uuid('return_port_id'),
 
     status: rentalStatusEnum('status')
       .default('PENDING')
@@ -62,10 +65,50 @@ export const rentals = pgTable(
     }).defaultNow().notNull(),
   },
   (table) => [
-uniqueIndex('one_active_rental_per_user')
-  .on(table.userId)
-  .where(
-    sql`${table.status} IN ('PENDING', 'ACTIVE')`,
-  ),
+    // Pickup port must belong to pickup station
+    foreignKey({
+      name: 'rentals_pickup_port_station_fk',
+      columns: [
+        table.pickupStationId,
+        table.pickupPortId,
+      ],
+      foreignColumns: [
+        ports.stationId,
+        ports.id,
+      ],
+    }),
+
+    // Return port must belong to return station
+    foreignKey({
+      name: 'rentals_return_port_station_fk',
+      columns: [
+        table.returnStationId,
+        table.returnPortId,
+      ],
+      foreignColumns: [
+        ports.stationId,
+        ports.id,
+      ],
+    }),
+
+    // Return station and port must both be NULL or both have values
+    check(
+      'rentals_return_location_pair_check',
+      sql`(${table.returnStationId} IS NULL) = (${table.returnPortId} IS NULL)`,
+    ),
+
+    // One active rental per user
+    uniqueIndex('one_active_rental_per_user')
+      .on(table.userId)
+      .where(
+        sql`${table.status} IN ('PENDING', 'ACTIVE')`,
+      ),
+
+    // One active rental per Power Bank
+    uniqueIndex('one_active_rental_per_power_bank')
+      .on(table.powerBankId)
+      .where(
+        sql`${table.status} IN ('PENDING', 'ACTIVE')`,
+      ),
   ],
 );

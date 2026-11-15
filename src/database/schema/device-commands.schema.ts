@@ -1,11 +1,12 @@
+
 import {
   pgEnum,
   pgTable,
   uuid,
-  varchar,
   timestamp,
   jsonb,
   index,
+  foreignKey,
 } from 'drizzle-orm/pg-core';
 
 import { stations } from './stations.schema.js';
@@ -51,8 +52,7 @@ export const deviceCommands = pgTable(
       .notNull()
       .references(() => stations.id),
 
-    portId: uuid('port_id')
-      .references(() => ports.id),
+    portId: uuid('port_id'),
 
     powerBankId: uuid('power_bank_id')
       .references(() => powerBanks.id),
@@ -92,10 +92,26 @@ export const deviceCommands = pgTable(
     }),
   },
   (table) => [
-    index('device_commands_station_id_idx').on(table.stationId),
+    // Ensure port belongs to the specified station
+    foreignKey({
+      name: 'device_commands_port_station_fk',
+      columns: [
+        table.stationId,
+        table.portId,
+      ],
+      foreignColumns: [
+        ports.stationId,
+        ports.id,
+      ],
+    }),
 
-    index('device_commands_status_idx').on(table.status),
+    index('device_commands_station_id_idx')
+      .on(table.stationId),
 
-    index('device_commands_created_at_idx').on(table.createdAt),
+    index('device_commands_status_idx')
+      .on(table.status),
+
+    index('device_commands_created_at_idx')
+      .on(table.createdAt),
   ],
 );
