@@ -1,4 +1,3 @@
-
 import { Module } from '@nestjs/common';
 
 import { PowerBanksController } from './power-banks.controller.js';

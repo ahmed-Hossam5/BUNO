@@ -20,6 +20,8 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { SupportModule } from './modules/support/support.module.js';
 import { AuditLogsModule } from './modules/audit-logs/audit-logs.module.js';
 import { PortsModule } from './modules/ports/ports.module.js';
+import { ScheduleModule } from '@nestjs/schedule';
+
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
 @Module({

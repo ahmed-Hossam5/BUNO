@@ -3,13 +3,14 @@ import {
   Body,
   Controller,
   Get,
+  Patch,
   Param,
   ParseUUIDPipe,
-  Patch,
 } from '@nestjs/common';
 
 import { PortsService } from './ports.service.js';
 import { UpdatePortStatusDto } from './dto/update-port-status.dto.js';
+
 @Controller()
 export class PortsController {
   constructor(
@@ -38,7 +39,6 @@ export class PortsController {
     return this.portsService.findByStation(stationId);
   }
 
-
   // PATCH /ports/:id/status
   @Patch('ports/:id/status')
   updateStatus(
@@ -47,5 +47,4 @@ export class PortsController {
   ) {
     return this.portsService.updateStatus(id, dto);
   }
-
 }
