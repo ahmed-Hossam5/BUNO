@@ -18,6 +18,7 @@ import {
 
 import { FindStationsQueryDto } from './dto/find-stations-query.dto.js';
 import { DATABASE_CONNECTION } from '../../database/database.constants.js';
+import { isUniqueViolation } from '../../database/database-errors.js';
 import type { databaseProvider } from '../../database/database.provider.js';
 
 import { stations } from '../../database/schema/stations.schema.js';
@@ -73,12 +74,7 @@ export class StationsService {
         };
       });
     } catch (error) {
-      if (
-        typeof error === 'object' &&
-        error !== null &&
-        'code' in error &&
-        error.code === '23505'
-      ) {
+      if (isUniqueViolation(error)) {
         throw new ConflictException(
           'A station with this station code already exists',
         );
@@ -219,12 +215,7 @@ export class StationsService {
       return updatedStation;
 
     } catch (error) {
-      if (
-        typeof error === 'object' &&
-        error !== null &&
-        'code' in error &&
-        error.code === '23505'
-      ) {
+      if (isUniqueViolation(error)) {
         throw new ConflictException(
           'A station with this station code already exists',
         );

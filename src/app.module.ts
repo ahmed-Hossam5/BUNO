@@ -30,6 +30,10 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
       isGlobal: true,
     }),
 
+    // Required by @Interval() jobs (notification worker,
+    // device command sweeper). Without forRoot() they never run.
+    ScheduleModule.forRoot(),
+
     DatabaseModule,
 
     ObserveModule.forRoot({

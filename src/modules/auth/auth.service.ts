@@ -39,6 +39,10 @@ import {
   DATABASE_CONNECTION,
 } from '../../database/database.constants.js';
 
+import {
+  isUniqueViolation,
+} from '../../database/database-errors.js';
+
 import type {
   databaseProvider,
 } from '../../database/database.provider.js';
@@ -504,11 +508,6 @@ export class AuthService {
   private isUniqueViolation(
     error: unknown,
   ): boolean {
-    return (
-      typeof error === 'object' &&
-      error !== null &&
-      'code' in error &&
-      error.code === '23505'
-    );
+    return isUniqueViolation(error);
   }
 }

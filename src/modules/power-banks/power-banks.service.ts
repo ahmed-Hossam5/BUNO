@@ -17,6 +17,7 @@ import {
 } from 'drizzle-orm';
 
 import { DATABASE_CONNECTION } from '../../database/database.constants.js';
+import { isUniqueViolation } from '../../database/database-errors.js';
 import type { databaseProvider } from '../../database/database.provider.js';
 
 import { powerBanks } from '../../database/schema/power-banks.schema.js';
@@ -117,12 +118,7 @@ export class PowerBanksService {
       return powerBank;
 
     } catch (error) {
-      if (
-        typeof error === 'object' &&
-        error !== null &&
-        'code' in error &&
-        error.code === '23505'
-      ) {
+      if (isUniqueViolation(error)) {
         throw new ConflictException(
           'A Power Bank with this identifier already exists',
         );
