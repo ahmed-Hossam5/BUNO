@@ -1,0 +1,3015 @@
+{
+  "id": "c26d98be-dc89-4241-95ab-e1fc0b1d1670",
+  "prevId": "0a6f6f15-6a40-4427-9ee2-ce365a127a92",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.audit_logs": {
+      "name": "audit_logs",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "action": {
+          "name": "action",
+          "type": "audit_action",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "entity_type": {
+          "name": "entity_type",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "entity_id": {
+          "name": "entity_id",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "old_values": {
+          "name": "old_values",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "new_values": {
+          "name": "new_values",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ip_address": {
+          "name": "ip_address",
+          "type": "inet",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "audit_logs_user_id_idx": {
+          "name": "audit_logs_user_id_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "audit_logs_entity_idx": {
+          "name": "audit_logs_entity_idx",
+          "columns": [
+            {
+              "expression": "entity_type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "entity_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "audit_logs_created_at_idx": {
+          "name": "audit_logs_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "audit_logs_user_id_users_id_fk": {
+          "name": "audit_logs_user_id_users_id_fk",
+          "tableFrom": "audit_logs",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.auth_sessions": {
+      "name": "auth_sessions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "refresh_token_hash": {
+          "name": "refresh_token_hash",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "revoked_at": {
+          "name": "revoked_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_used_at": {
+          "name": "last_used_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "auth_sessions_refresh_token_hash_unique": {
+          "name": "auth_sessions_refresh_token_hash_unique",
+          "columns": [
+            {
+              "expression": "refresh_token_hash",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "auth_sessions_user_id_idx": {
+          "name": "auth_sessions_user_id_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "auth_sessions_expires_at_idx": {
+          "name": "auth_sessions_expires_at_idx",
+          "columns": [
+            {
+              "expression": "expires_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "auth_sessions_user_id_users_id_fk": {
+          "name": "auth_sessions_user_id_users_id_fk",
+          "tableFrom": "auth_sessions",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.device_commands": {
+      "name": "device_commands",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "command_id": {
+          "name": "command_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "station_id": {
+          "name": "station_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "port_id": {
+          "name": "port_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "power_bank_id": {
+          "name": "power_bank_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "requested_by": {
+          "name": "requested_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "command_type": {
+          "name": "command_type",
+          "type": "device_command_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "device_command_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'PENDING'"
+        },
+        "payload": {
+          "name": "payload",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "response": {
+          "name": "response",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "sent_at": {
+          "name": "sent_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "acknowledged_at": {
+          "name": "acknowledged_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "completed_at": {
+          "name": "completed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "device_commands_active_port_unique": {
+          "name": "device_commands_active_port_unique",
+          "columns": [
+            {
+              "expression": "port_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"device_commands\".\"port_id\" IS NOT NULL\n          AND \"device_commands\".\"status\" IN ('PENDING', 'SENT', 'ACKNOWLEDGED')",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "device_commands_active_restart_unique": {
+          "name": "device_commands_active_restart_unique",
+          "columns": [
+            {
+              "expression": "station_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"device_commands\".\"command_type\" = 'RESTART_STATION'\n          AND \"device_commands\".\"status\" IN ('PENDING', 'SENT', 'ACKNOWLEDGED')",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "device_commands_station_id_idx": {
+          "name": "device_commands_station_id_idx",
+          "columns": [
+            {
+              "expression": "station_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "device_commands_status_idx": {
+          "name": "device_commands_status_idx",
+          "columns": [
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "device_commands_created_at_idx": {
+          "name": "device_commands_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "device_commands_station_id_stations_id_fk": {
+          "name": "device_commands_station_id_stations_id_fk",
+          "tableFrom": "device_commands",
+          "tableTo": "stations",
+          "columnsFrom": [
+            "station_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "device_commands_power_bank_id_power_banks_id_fk": {
+          "name": "device_commands_power_bank_id_power_banks_id_fk",
+          "tableFrom": "device_commands",
+          "tableTo": "power_banks",
+          "columnsFrom": [
+            "power_bank_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "device_commands_requested_by_users_id_fk": {
+          "name": "device_commands_requested_by_users_id_fk",
+          "tableFrom": "device_commands",
+          "tableTo": "users",
+          "columnsFrom": [
+            "requested_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "device_commands_port_station_fk": {
+          "name": "device_commands_port_station_fk",
+          "tableFrom": "device_commands",
+          "tableTo": "ports",
+          "columnsFrom": [
+            "station_id",
+            "port_id"
+          ],
+          "columnsTo": [
+            "station_id",
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "device_commands_command_id_unique": {
+          "name": "device_commands_command_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "command_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "full_name": {
+          "name": "full_name",
+          "type": "varchar(150)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password_hash": {
+          "name": "password_hash",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "phone": {
+          "name": "phone",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role": {
+          "name": "role",
+          "type": "user_role",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'CUSTOMER'"
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        },
+        "users_phone_unique": {
+          "name": "users_phone_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "phone"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.stations": {
+      "name": "stations",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "station_code": {
+          "name": "station_code",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(150)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "total_ports": {
+          "name": "total_ports",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 4
+        },
+        "status": {
+          "name": "status",
+          "type": "station_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'OFFLINE'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "stations_station_code_unique": {
+          "name": "stations_station_code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "station_code"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.ports": {
+      "name": "ports",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "station_id": {
+          "name": "station_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "port_number": {
+          "name": "port_number",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "port_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'EMPTY'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ports_station_id_stations_id_fk": {
+          "name": "ports_station_id_stations_id_fk",
+          "tableFrom": "ports",
+          "tableTo": "stations",
+          "columnsFrom": [
+            "station_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "station_port_number_unique": {
+          "name": "station_port_number_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "station_id",
+            "port_number"
+          ]
+        },
+        "ports_station_id_id_unique": {
+          "name": "ports_station_id_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "station_id",
+            "id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.power_banks": {
+      "name": "power_banks",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "device_identifier": {
+          "name": "device_identifier",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "power_bank_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'AVAILABLE'"
+        },
+        "current_port_id": {
+          "name": "current_port_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "power_banks_current_port_id_ports_id_fk": {
+          "name": "power_banks_current_port_id_ports_id_fk",
+          "tableFrom": "power_banks",
+          "tableTo": "ports",
+          "columnsFrom": [
+            "current_port_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "power_banks_device_identifier_unique": {
+          "name": "power_banks_device_identifier_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "device_identifier"
+          ]
+        },
+        "power_banks_current_port_id_unique": {
+          "name": "power_banks_current_port_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "current_port_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.rentals": {
+      "name": "rentals",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "power_bank_id": {
+          "name": "power_bank_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pickup_station_id": {
+          "name": "pickup_station_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pickup_port_id": {
+          "name": "pickup_port_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "return_station_id": {
+          "name": "return_station_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "return_port_id": {
+          "name": "return_port_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "rental_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'PENDING'"
+        },
+        "started_at": {
+          "name": "started_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "returned_at": {
+          "name": "returned_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "one_active_rental_per_user": {
+          "name": "one_active_rental_per_user",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"rentals\".\"status\" IN ('PENDING', 'ACTIVE')",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "one_active_rental_per_power_bank": {
+          "name": "one_active_rental_per_power_bank",
+          "columns": [
+            {
+              "expression": "power_bank_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"rentals\".\"status\" IN ('PENDING', 'ACTIVE')",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "rentals_user_id_users_id_fk": {
+          "name": "rentals_user_id_users_id_fk",
+          "tableFrom": "rentals",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "rentals_power_bank_id_power_banks_id_fk": {
+          "name": "rentals_power_bank_id_power_banks_id_fk",
+          "tableFrom": "rentals",
+          "tableTo": "power_banks",
+          "columnsFrom": [
+            "power_bank_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "rentals_pickup_station_id_stations_id_fk": {
+          "name": "rentals_pickup_station_id_stations_id_fk",
+          "tableFrom": "rentals",
+          "tableTo": "stations",
+          "columnsFrom": [
+            "pickup_station_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "rentals_return_station_id_stations_id_fk": {
+          "name": "rentals_return_station_id_stations_id_fk",
+          "tableFrom": "rentals",
+          "tableTo": "stations",
+          "columnsFrom": [
+            "return_station_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "rentals_pickup_port_station_fk": {
+          "name": "rentals_pickup_port_station_fk",
+          "tableFrom": "rentals",
+          "tableTo": "ports",
+          "columnsFrom": [
+            "pickup_station_id",
+            "pickup_port_id"
+          ],
+          "columnsTo": [
+            "station_id",
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "rentals_return_port_station_fk": {
+          "name": "rentals_return_port_station_fk",
+          "tableFrom": "rentals",
+          "tableTo": "ports",
+          "columnsFrom": [
+            "return_station_id",
+            "return_port_id"
+          ],
+          "columnsTo": [
+            "station_id",
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "rentals_return_location_pair_check": {
+          "name": "rentals_return_location_pair_check",
+          "value": "(\"rentals\".\"return_station_id\" IS NULL) = (\"rentals\".\"return_port_id\" IS NULL)"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.telemetry": {
+      "name": "telemetry",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "station_id": {
+          "name": "station_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "port_id": {
+          "name": "port_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "power_bank_id": {
+          "name": "power_bank_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "event_type": {
+          "name": "event_type",
+          "type": "telemetry_event_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "data": {
+          "name": "data",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "recorded_at": {
+          "name": "recorded_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "received_at": {
+          "name": "received_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "telemetry_station_id_idx": {
+          "name": "telemetry_station_id_idx",
+          "columns": [
+            {
+              "expression": "station_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "telemetry_power_bank_id_idx": {
+          "name": "telemetry_power_bank_id_idx",
+          "columns": [
+            {
+              "expression": "power_bank_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "telemetry_recorded_at_idx": {
+          "name": "telemetry_recorded_at_idx",
+          "columns": [
+            {
+              "expression": "recorded_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "telemetry_station_id_stations_id_fk": {
+          "name": "telemetry_station_id_stations_id_fk",
+          "tableFrom": "telemetry",
+          "tableTo": "stations",
+          "columnsFrom": [
+            "station_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "telemetry_power_bank_id_power_banks_id_fk": {
+          "name": "telemetry_power_bank_id_power_banks_id_fk",
+          "tableFrom": "telemetry",
+          "tableTo": "power_banks",
+          "columnsFrom": [
+            "power_bank_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "telemetry_port_station_fk": {
+          "name": "telemetry_port_station_fk",
+          "tableFrom": "telemetry",
+          "tableTo": "ports",
+          "columnsFrom": [
+            "station_id",
+            "port_id"
+          ],
+          "columnsTo": [
+            "station_id",
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.notifications": {
+      "name": "notifications",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "notification_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "message": {
+          "name": "message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "data": {
+          "name": "data",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_read": {
+          "name": "is_read",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "read_at": {
+          "name": "read_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "notifications_user_id_idx": {
+          "name": "notifications_user_id_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "notifications_created_at_idx": {
+          "name": "notifications_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "notifications_user_id_users_id_fk": {
+          "name": "notifications_user_id_users_id_fk",
+          "tableFrom": "notifications",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.transfer_missions": {
+      "name": "transfer_missions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "source_station_id": {
+          "name": "source_station_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "destination_station_id": {
+          "name": "destination_station_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "assigned_to": {
+          "name": "assigned_to",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "transfer_mission_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'OPEN'"
+        },
+        "accepted_at": {
+          "name": "accepted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "started_at": {
+          "name": "started_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "completed_at": {
+          "name": "completed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cancelled_at": {
+          "name": "cancelled_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "transfer_missions_status_idx": {
+          "name": "transfer_missions_status_idx",
+          "columns": [
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "transfer_missions_assigned_to_idx": {
+          "name": "transfer_missions_assigned_to_idx",
+          "columns": [
+            {
+              "expression": "assigned_to",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "transfer_missions_source_station_idx": {
+          "name": "transfer_missions_source_station_idx",
+          "columns": [
+            {
+              "expression": "source_station_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "transfer_missions_destination_station_idx": {
+          "name": "transfer_missions_destination_station_idx",
+          "columns": [
+            {
+              "expression": "destination_station_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "transfer_missions_id_source_station_unique": {
+          "name": "transfer_missions_id_source_station_unique",
+          "columns": [
+            {
+              "expression": "id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "source_station_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "transfer_missions_id_destination_station_unique": {
+          "name": "transfer_missions_id_destination_station_unique",
+          "columns": [
+            {
+              "expression": "id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "destination_station_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "transfer_missions_source_station_id_stations_id_fk": {
+          "name": "transfer_missions_source_station_id_stations_id_fk",
+          "tableFrom": "transfer_missions",
+          "tableTo": "stations",
+          "columnsFrom": [
+            "source_station_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "transfer_missions_destination_station_id_stations_id_fk": {
+          "name": "transfer_missions_destination_station_id_stations_id_fk",
+          "tableFrom": "transfer_missions",
+          "tableTo": "stations",
+          "columnsFrom": [
+            "destination_station_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "transfer_missions_created_by_users_id_fk": {
+          "name": "transfer_missions_created_by_users_id_fk",
+          "tableFrom": "transfer_missions",
+          "tableTo": "users",
+          "columnsFrom": [
+            "created_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "transfer_missions_assigned_to_users_id_fk": {
+          "name": "transfer_missions_assigned_to_users_id_fk",
+          "tableFrom": "transfer_missions",
+          "tableTo": "users",
+          "columnsFrom": [
+            "assigned_to"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "transfer_missions_different_stations": {
+          "name": "transfer_missions_different_stations",
+          "value": "\"transfer_missions\".\"source_station_id\" <> \"transfer_missions\".\"destination_station_id\""
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.transfer_mission_items": {
+      "name": "transfer_mission_items",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "mission_id": {
+          "name": "mission_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "power_bank_id": {
+          "name": "power_bank_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "from_station_id": {
+          "name": "from_station_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "from_port_id": {
+          "name": "from_port_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "to_station_id": {
+          "name": "to_station_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "to_port_id": {
+          "name": "to_port_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "transfer_mission_item_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'PENDING'"
+        },
+        "removed_at": {
+          "name": "removed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "received_at": {
+          "name": "received_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "failure_reason": {
+          "name": "failure_reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "transfer_mission_items_mission_power_bank_unique": {
+          "name": "transfer_mission_items_mission_power_bank_unique",
+          "columns": [
+            {
+              "expression": "mission_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "power_bank_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "transfer_mission_items_active_power_bank_unique": {
+          "name": "transfer_mission_items_active_power_bank_unique",
+          "columns": [
+            {
+              "expression": "power_bank_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"transfer_mission_items\".\"status\" IN ('PENDING', 'IN_TRANSIT', 'FAILED')",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "transfer_mission_items_mission_id_idx": {
+          "name": "transfer_mission_items_mission_id_idx",
+          "columns": [
+            {
+              "expression": "mission_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "transfer_mission_items_power_bank_id_idx": {
+          "name": "transfer_mission_items_power_bank_id_idx",
+          "columns": [
+            {
+              "expression": "power_bank_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "transfer_mission_items_power_bank_id_power_banks_id_fk": {
+          "name": "transfer_mission_items_power_bank_id_power_banks_id_fk",
+          "tableFrom": "transfer_mission_items",
+          "tableTo": "power_banks",
+          "columnsFrom": [
+            "power_bank_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "transfer_items_mission_source_fk": {
+          "name": "transfer_items_mission_source_fk",
+          "tableFrom": "transfer_mission_items",
+          "tableTo": "transfer_missions",
+          "columnsFrom": [
+            "mission_id",
+            "from_station_id"
+          ],
+          "columnsTo": [
+            "id",
+            "source_station_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "transfer_items_mission_destination_fk": {
+          "name": "transfer_items_mission_destination_fk",
+          "tableFrom": "transfer_mission_items",
+          "tableTo": "transfer_missions",
+          "columnsFrom": [
+            "mission_id",
+            "to_station_id"
+          ],
+          "columnsTo": [
+            "id",
+            "destination_station_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "transfer_items_from_port_station_fk": {
+          "name": "transfer_items_from_port_station_fk",
+          "tableFrom": "transfer_mission_items",
+          "tableTo": "ports",
+          "columnsFrom": [
+            "from_station_id",
+            "from_port_id"
+          ],
+          "columnsTo": [
+            "station_id",
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "transfer_items_to_port_station_fk": {
+          "name": "transfer_items_to_port_station_fk",
+          "tableFrom": "transfer_mission_items",
+          "tableTo": "ports",
+          "columnsFrom": [
+            "to_station_id",
+            "to_port_id"
+          ],
+          "columnsTo": [
+            "station_id",
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.power_bank_movements": {
+      "name": "power_bank_movements",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "power_bank_id": {
+          "name": "power_bank_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "from_station_id": {
+          "name": "from_station_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "from_port_id": {
+          "name": "from_port_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "to_station_id": {
+          "name": "to_station_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "to_port_id": {
+          "name": "to_port_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "performed_by": {
+          "name": "performed_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "movement_type": {
+          "name": "movement_type",
+          "type": "power_bank_movement_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rental_id": {
+          "name": "rental_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "transfer_mission_item_id": {
+          "name": "transfer_mission_item_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "power_bank_movements_power_bank_id_idx": {
+          "name": "power_bank_movements_power_bank_id_idx",
+          "columns": [
+            {
+              "expression": "power_bank_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "power_bank_movements_performed_by_idx": {
+          "name": "power_bank_movements_performed_by_idx",
+          "columns": [
+            {
+              "expression": "performed_by",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "power_bank_movements_rental_id_idx": {
+          "name": "power_bank_movements_rental_id_idx",
+          "columns": [
+            {
+              "expression": "rental_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "power_bank_movements_created_at_idx": {
+          "name": "power_bank_movements_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "power_bank_movements_transfer_item_type_unique": {
+          "name": "power_bank_movements_transfer_item_type_unique",
+          "columns": [
+            {
+              "expression": "transfer_mission_item_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "movement_type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"power_bank_movements\".\"transfer_mission_item_id\" IS NOT NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "power_bank_movements_power_bank_id_power_banks_id_fk": {
+          "name": "power_bank_movements_power_bank_id_power_banks_id_fk",
+          "tableFrom": "power_bank_movements",
+          "tableTo": "power_banks",
+          "columnsFrom": [
+            "power_bank_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "power_bank_movements_performed_by_users_id_fk": {
+          "name": "power_bank_movements_performed_by_users_id_fk",
+          "tableFrom": "power_bank_movements",
+          "tableTo": "users",
+          "columnsFrom": [
+            "performed_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "power_bank_movements_rental_id_rentals_id_fk": {
+          "name": "power_bank_movements_rental_id_rentals_id_fk",
+          "tableFrom": "power_bank_movements",
+          "tableTo": "rentals",
+          "columnsFrom": [
+            "rental_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "power_bank_movements_transfer_mission_item_id_transfer_mission_items_id_fk": {
+          "name": "power_bank_movements_transfer_mission_item_id_transfer_mission_items_id_fk",
+          "tableFrom": "power_bank_movements",
+          "tableTo": "transfer_mission_items",
+          "columnsFrom": [
+            "transfer_mission_item_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "power_bank_movements_from_port_station_fk": {
+          "name": "power_bank_movements_from_port_station_fk",
+          "tableFrom": "power_bank_movements",
+          "tableTo": "ports",
+          "columnsFrom": [
+            "from_station_id",
+            "from_port_id"
+          ],
+          "columnsTo": [
+            "station_id",
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "power_bank_movements_to_port_station_fk": {
+          "name": "power_bank_movements_to_port_station_fk",
+          "tableFrom": "power_bank_movements",
+          "tableTo": "ports",
+          "columnsFrom": [
+            "to_station_id",
+            "to_port_id"
+          ],
+          "columnsTo": [
+            "station_id",
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "power_bank_movements_from_location_pair_check": {
+          "name": "power_bank_movements_from_location_pair_check",
+          "value": "(\"power_bank_movements\".\"from_station_id\" IS NULL) = (\"power_bank_movements\".\"from_port_id\" IS NULL)"
+        },
+        "power_bank_movements_to_location_pair_check": {
+          "name": "power_bank_movements_to_location_pair_check",
+          "value": "(\"power_bank_movements\".\"to_station_id\" IS NULL) = (\"power_bank_movements\".\"to_port_id\" IS NULL)"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.user_devices": {
+      "name": "user_devices",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "installation_id": {
+          "name": "installation_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fcm_token": {
+          "name": "fcm_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "platform": {
+          "name": "platform",
+          "type": "device_platform",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "device_name": {
+          "name": "device_name",
+          "type": "varchar(150)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "device_model": {
+          "name": "device_model",
+          "type": "varchar(150)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "app_version": {
+          "name": "app_version",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": true
+        },
+        "last_seen_at": {
+          "name": "last_seen_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "user_devices_installation_id_unique": {
+          "name": "user_devices_installation_id_unique",
+          "columns": [
+            {
+              "expression": "installation_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "user_devices_fcm_token_unique": {
+          "name": "user_devices_fcm_token_unique",
+          "columns": [
+            {
+              "expression": "fcm_token",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "user_devices_user_id_idx": {
+          "name": "user_devices_user_id_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "user_devices_user_active_idx": {
+          "name": "user_devices_user_active_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "is_active",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "user_devices_user_id_users_id_fk": {
+          "name": "user_devices_user_id_users_id_fk",
+          "tableFrom": "user_devices",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.notification_deliveries": {
+      "name": "notification_deliveries",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "notification_id": {
+          "name": "notification_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_device_id": {
+          "name": "user_device_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "notification_delivery_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'PENDING'"
+        },
+        "attempt_count": {
+          "name": "attempt_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "max_attempts": {
+          "name": "max_attempts",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 5
+        },
+        "next_attempt_at": {
+          "name": "next_attempt_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "last_attempt_at": {
+          "name": "last_attempt_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "locked_until": {
+          "name": "locked_until",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sent_at": {
+          "name": "sent_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "failed_at": {
+          "name": "failed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_error_code": {
+          "name": "last_error_code",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_error_message": {
+          "name": "last_error_message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "notification_deliveries_notification_device_unique": {
+          "name": "notification_deliveries_notification_device_unique",
+          "columns": [
+            {
+              "expression": "notification_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "user_device_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "notification_deliveries_device_id_idx": {
+          "name": "notification_deliveries_device_id_idx",
+          "columns": [
+            {
+              "expression": "user_device_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "notification_deliveries_status_next_attempt_idx": {
+          "name": "notification_deliveries_status_next_attempt_idx",
+          "columns": [
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "next_attempt_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "notification_deliveries_notification_id_notifications_id_fk": {
+          "name": "notification_deliveries_notification_id_notifications_id_fk",
+          "tableFrom": "notification_deliveries",
+          "tableTo": "notifications",
+          "columnsFrom": [
+            "notification_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "notification_deliveries_user_device_id_user_devices_id_fk": {
+          "name": "notification_deliveries_user_device_id_user_devices_id_fk",
+          "tableFrom": "notification_deliveries",
+          "tableTo": "user_devices",
+          "columnsFrom": [
+            "user_device_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "notification_deliveries_attempt_count_check": {
+          "name": "notification_deliveries_attempt_count_check",
+          "value": "\"notification_deliveries\".\"attempt_count\" >= 0\n        AND \"notification_deliveries\".\"attempt_count\" <= \"notification_deliveries\".\"max_attempts\""
+        },
+        "notification_deliveries_max_attempts_check": {
+          "name": "notification_deliveries_max_attempts_check",
+          "value": "\"notification_deliveries\".\"max_attempts\" > 0"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.maintenance_records": {
+      "name": "maintenance_records",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "target_type": {
+          "name": "target_type",
+          "type": "maintenance_target_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "station_id": {
+          "name": "station_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "port_id": {
+          "name": "port_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "power_bank_id": {
+          "name": "power_bank_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "maintenance_type": {
+          "name": "maintenance_type",
+          "type": "maintenance_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "priority": {
+          "name": "priority",
+          "type": "maintenance_priority",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'MEDIUM'"
+        },
+        "status": {
+          "name": "status",
+          "type": "maintenance_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'OPEN'"
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "resolution_notes": {
+          "name": "resolution_notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "previous_status": {
+          "name": "previous_status",
+          "type": "varchar(30)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reported_by": {
+          "name": "reported_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "assigned_to": {
+          "name": "assigned_to",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "started_at": {
+          "name": "started_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "completed_at": {
+          "name": "completed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cancelled_at": {
+          "name": "cancelled_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "maintenance_active_station_unique": {
+          "name": "maintenance_active_station_unique",
+          "columns": [
+            {
+              "expression": "station_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"maintenance_records\".\"target_type\" = 'STATION'\n          AND \"maintenance_records\".\"status\" IN ('OPEN', 'IN_PROGRESS')",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "maintenance_active_port_unique": {
+          "name": "maintenance_active_port_unique",
+          "columns": [
+            {
+              "expression": "port_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"maintenance_records\".\"target_type\" = 'PORT'\n          AND \"maintenance_records\".\"status\" IN ('OPEN', 'IN_PROGRESS')",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "maintenance_active_power_bank_unique": {
+          "name": "maintenance_active_power_bank_unique",
+          "columns": [
+            {
+              "expression": "power_bank_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"maintenance_records\".\"target_type\" = 'POWER_BANK'\n          AND \"maintenance_records\".\"status\" IN ('OPEN', 'IN_PROGRESS')",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "maintenance_records_status_idx": {
+          "name": "maintenance_records_status_idx",
+          "columns": [
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "maintenance_records_station_id_idx": {
+          "name": "maintenance_records_station_id_idx",
+          "columns": [
+            {
+              "expression": "station_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "maintenance_records_port_id_idx": {
+          "name": "maintenance_records_port_id_idx",
+          "columns": [
+            {
+              "expression": "port_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "maintenance_records_power_bank_id_idx": {
+          "name": "maintenance_records_power_bank_id_idx",
+          "columns": [
+            {
+              "expression": "power_bank_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "maintenance_records_assigned_to_idx": {
+          "name": "maintenance_records_assigned_to_idx",
+          "columns": [
+            {
+              "expression": "assigned_to",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "maintenance_records_created_at_idx": {
+          "name": "maintenance_records_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "maintenance_records_station_id_stations_id_fk": {
+          "name": "maintenance_records_station_id_stations_id_fk",
+          "tableFrom": "maintenance_records",
+          "tableTo": "stations",
+          "columnsFrom": [
+            "station_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "maintenance_records_power_bank_id_power_banks_id_fk": {
+          "name": "maintenance_records_power_bank_id_power_banks_id_fk",
+          "tableFrom": "maintenance_records",
+          "tableTo": "power_banks",
+          "columnsFrom": [
+            "power_bank_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "maintenance_records_reported_by_users_id_fk": {
+          "name": "maintenance_records_reported_by_users_id_fk",
+          "tableFrom": "maintenance_records",
+          "tableTo": "users",
+          "columnsFrom": [
+            "reported_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "maintenance_records_assigned_to_users_id_fk": {
+          "name": "maintenance_records_assigned_to_users_id_fk",
+          "tableFrom": "maintenance_records",
+          "tableTo": "users",
+          "columnsFrom": [
+            "assigned_to"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "maintenance_records_port_station_fk": {
+          "name": "maintenance_records_port_station_fk",
+          "tableFrom": "maintenance_records",
+          "tableTo": "ports",
+          "columnsFrom": [
+            "station_id",
+            "port_id"
+          ],
+          "columnsTo": [
+            "station_id",
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "maintenance_records_target_shape_check": {
+          "name": "maintenance_records_target_shape_check",
+          "value": "(\n        \"maintenance_records\".\"target_type\" = 'STATION'\n        AND \"maintenance_records\".\"station_id\" IS NOT NULL\n        AND \"maintenance_records\".\"port_id\" IS NULL\n        AND \"maintenance_records\".\"power_bank_id\" IS NULL\n      ) OR (\n        \"maintenance_records\".\"target_type\" = 'PORT'\n        AND \"maintenance_records\".\"station_id\" IS NOT NULL\n        AND \"maintenance_records\".\"port_id\" IS NOT NULL\n        AND \"maintenance_records\".\"power_bank_id\" IS NULL\n      ) OR (\n        \"maintenance_records\".\"target_type\" = 'POWER_BANK'\n        AND \"maintenance_records\".\"power_bank_id\" IS NOT NULL\n        AND \"maintenance_records\".\"station_id\" IS NULL\n        AND \"maintenance_records\".\"port_id\" IS NULL\n      )"
+        }
+      },
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.audit_action": {
+      "name": "audit_action",
+      "schema": "public",
+      "values": [
+        "CREATE",
+        "UPDATE",
+        "DELETE",
+        "LOGIN",
+        "LOGOUT",
+        "COMMAND",
+        "STATUS_CHANGE"
+      ]
+    },
+    "public.device_command_status": {
+      "name": "device_command_status",
+      "schema": "public",
+      "values": [
+        "PENDING",
+        "SENT",
+        "ACKNOWLEDGED",
+        "SUCCEEDED",
+        "FAILED",
+        "TIMED_OUT",
+        "CANCELLED"
+      ]
+    },
+    "public.device_command_type": {
+      "name": "device_command_type",
+      "schema": "public",
+      "values": [
+        "RELEASE_POWER_BANK",
+        "STOP_CHARGING",
+        "RESTART_STATION",
+        "LOCK_PORT",
+        "UNLOCK_PORT"
+      ]
+    },
+    "public.user_role": {
+      "name": "user_role",
+      "schema": "public",
+      "values": [
+        "CUSTOMER",
+        "ADMIN",
+        "TECHNICIAN",
+        "SUPER_ADMIN"
+      ]
+    },
+    "public.station_status": {
+      "name": "station_status",
+      "schema": "public",
+      "values": [
+        "ONLINE",
+        "OFFLINE",
+        "MAINTENANCE"
+      ]
+    },
+    "public.port_status": {
+      "name": "port_status",
+      "schema": "public",
+      "values": [
+        "EMPTY",
+        "OCCUPIED",
+        "DISABLED",
+        "MAINTENANCE"
+      ]
+    },
+    "public.power_bank_status": {
+      "name": "power_bank_status",
+      "schema": "public",
+      "values": [
+        "AVAILABLE",
+        "RESERVED",
+        "RENTED",
+        "MAINTENANCE",
+        "LOST"
+      ]
+    },
+    "public.rental_status": {
+      "name": "rental_status",
+      "schema": "public",
+      "values": [
+        "PENDING",
+        "ACTIVE",
+        "RETURNED",
+        "CANCELLED"
+      ]
+    },
+    "public.telemetry_event_type": {
+      "name": "telemetry_event_type",
+      "schema": "public",
+      "values": [
+        "HEARTBEAT",
+        "BATTERY_UPDATE",
+        "TEMPERATURE_UPDATE",
+        "PORT_STATUS_UPDATE",
+        "CHARGING_UPDATE",
+        "ERROR"
+      ]
+    },
+    "public.notification_type": {
+      "name": "notification_type",
+      "schema": "public",
+      "values": [
+        "RENTAL_STARTED",
+        "RENTAL_RETURNED",
+        "RENTAL_FAILED",
+        "PAYMENT_SUCCESS",
+        "PAYMENT_FAILED",
+        "STATION_OFFLINE",
+        "SYSTEM_ALERT"
+      ]
+    },
+    "public.transfer_mission_status": {
+      "name": "transfer_mission_status",
+      "schema": "public",
+      "values": [
+        "OPEN",
+        "ASSIGNED",
+        "IN_PROGRESS",
+        "PARTIALLY_COMPLETED",
+        "COMPLETED",
+        "CANCELLED"
+      ]
+    },
+    "public.transfer_mission_item_status": {
+      "name": "transfer_mission_item_status",
+      "schema": "public",
+      "values": [
+        "PENDING",
+        "IN_TRANSIT",
+        "COMPLETED",
+        "FAILED",
+        "CANCELLED"
+      ]
+    },
+    "public.power_bank_movement_type": {
+      "name": "power_bank_movement_type",
+      "schema": "public",
+      "values": [
+        "INITIAL_PLACEMENT",
+        "RENTAL_PICKUP",
+        "RENTAL_RETURN",
+        "TRANSFER_OUT",
+        "TRANSFER_IN",
+        "MAINTENANCE_OUT",
+        "MAINTENANCE_RETURN"
+      ]
+    },
+    "public.device_platform": {
+      "name": "device_platform",
+      "schema": "public",
+      "values": [
+        "ANDROID",
+        "IOS"
+      ]
+    },
+    "public.notification_delivery_status": {
+      "name": "notification_delivery_status",
+      "schema": "public",
+      "values": [
+        "PENDING",
+        "PROCESSING",
+        "SENT",
+        "FAILED",
+        "CANCELLED"
+      ]
+    },
+    "public.maintenance_priority": {
+      "name": "maintenance_priority",
+      "schema": "public",
+      "values": [
+        "LOW",
+        "MEDIUM",
+        "HIGH",
+        "CRITICAL"
+      ]
+    },
+    "public.maintenance_status": {
+      "name": "maintenance_status",
+      "schema": "public",
+      "values": [
+        "OPEN",
+        "IN_PROGRESS",
+        "COMPLETED",
+        "CANCELLED"
+      ]
+    },
+    "public.maintenance_target_type": {
+      "name": "maintenance_target_type",
+      "schema": "public",
+      "values": [
+        "STATION",
+        "PORT",
+        "POWER_BANK"
+      ]
+    },
+    "public.maintenance_type": {
+      "name": "maintenance_type",
+      "schema": "public",
+      "values": [
+        "PREVENTIVE",
+        "CORRECTIVE",
+        "INSPECTION"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

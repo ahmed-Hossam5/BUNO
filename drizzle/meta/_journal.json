@@ -1,0 +1,125 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1793831538474,
+      "tag": "0000_panoramic_quentin_quire",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793837671790,
+      "tag": "0001_tiny_mordo",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793837905445,
+      "tag": "0002_elite_energizer",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793840412969,
+      "tag": "0003_keen_thunderbolt_ross",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793841751899,
+      "tag": "0004_superb_ogun",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793844735095,
+      "tag": "0005_lyrical_oracle",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793844964104,
+      "tag": "0006_overjoyed_bulldozer",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1793845240526,
+      "tag": "0007_cynical_vision",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793845499889,
+      "tag": "0008_wide_spot",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1794708294019,
+      "tag": "0009_icy_wolf_cub",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1794709404060,
+      "tag": "0010_nappy_molecule_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1794913989055,
+      "tag": "0011_flashy_lockjaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1794916425668,
+      "tag": "0012_slippery_micromax",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1794924347365,
+      "tag": "0013_square_proteus",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1795083819820,
+      "tag": "0014_maintenance_records",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1795083820764,
+      "tag": "0015_audit_logs_immutable",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1795119941653,
+      "tag": "0016_device_commands_active_unique",
+      "breakpoints": true
+    }
+  ]
+}
