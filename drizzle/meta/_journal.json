@@ -99,6 +99,27 @@
       "when": 1794924347365,
       "tag": "0013_square_proteus",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1795083819820,
+      "tag": "0014_maintenance_records",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1795083820764,
+      "tag": "0015_audit_logs_immutable",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1795119941653,
+      "tag": "0016_device_commands_active_unique",
+      "breakpoints": true
     }
   ]
 }

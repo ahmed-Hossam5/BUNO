@@ -6,8 +6,11 @@ import {
   timestamp,
   jsonb,
   index,
+  uniqueIndex,
   foreignKey,
 } from 'drizzle-orm/pg-core';
+
+import { sql } from 'drizzle-orm';
 
 import { stations } from './stations.schema.js';
 import { ports } from './ports.schema.js';
@@ -104,6 +107,23 @@ export const deviceCommands = pgTable(
         ports.id,
       ],
     }),
+
+    // Database-level guarantees (hold even under concurrency):
+    //  - at most one active command per port
+    //  - at most one active RESTART_STATION per station
+    uniqueIndex('device_commands_active_port_unique')
+      .on(table.portId)
+      .where(
+        sql`${table.portId} IS NOT NULL
+          AND ${table.status} IN ('PENDING', 'SENT', 'ACKNOWLEDGED')`,
+      ),
+
+    uniqueIndex('device_commands_active_restart_unique')
+      .on(table.stationId)
+      .where(
+        sql`${table.commandType} = 'RESTART_STATION'
+          AND ${table.status} IN ('PENDING', 'SENT', 'ACKNOWLEDGED')`,
+      ),
 
     index('device_commands_station_id_idx')
       .on(table.stationId),

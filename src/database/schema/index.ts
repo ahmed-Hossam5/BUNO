@@ -10,7 +10,7 @@ export * from './audit-logs.schema.js';
 export * from './transfer-missions.schema.js';
 export * from './transfer-mission-items.schema.js';
 export * from './power-bank-movements.schema.js';
-export * from './notifications.schema.js';
 export * from './user-devices.schema.js';
 export * from './notification-deliveries.schema.js';
 export * from './auth-sessions.schema.js';
+export * from './maintenance.schema.js';
